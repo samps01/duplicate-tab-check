@@ -145,14 +145,18 @@ class ValidateTab {
  * @returns {boolean}
  * @constructor
  */
-window.IsDuplicate = function () {
-    let tabValidate = new ValidateTab(5000, 1000);
+window.checkTabStatus = function () {
+    let tabValidate = new ValidateTab(5000, 1000); // 5 sec expiry window & 1 sec interval to set UUID
     let uniqueTab = tabValidate.validateTabIsUnique();
     console.log("Is unique: "+ uniqueTab);
     if (!uniqueTab) {
         let html = document.querySelector('html');
         html.innerHTML = 'Duplicate Tab';
     }
+
+    window.addEventListener('unload', function () {
+       tabValidate.setValue('cookieStorage', "");
+    });
 
     window.addEventListener("beforeunload", function () {
         if (uniqueTab == true) {
@@ -164,4 +168,4 @@ window.IsDuplicate = function () {
 };
 
 
-window.IsDuplicate();
+window.checkTabStatus();
